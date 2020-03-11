@@ -1,0 +1,92 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    border: 0;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    background: black;
+    justify-content: center;
+    align-items: center;
+}
+
+#menuing {
+    background-color: black;
+    color: white;
+}
+
+#menuing .screen {
+    display: none;
+}
+
+#menuing .screen.active {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+#mainMenu {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#highScores {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#credits {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#controls {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#controlsTable {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+}
+
+.tableHeader {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.tableRow {
+    border: 1px solid transparent;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.tableRow.active {
+    border: 1px solid yellow;
+    color: yellow;
+}
+
+.tableRow:hover {
+    border: 1px solid yellow;
+    color: yellow;
+}
+
+.table-row-item {
+    width: 50%;
+    text-align: center;
+}
+
+#myCanvas {
+    background-color: black;
+    position: absolute;
+}

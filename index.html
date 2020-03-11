@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang = "en-US">
+<head>
+    <meta charset = "UTF-8">
+    <title>Lunar Lander</title>
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+</head>
+<body onload="MyGame.game.initialize()">
+    <div id="menuing">
+        <div id="mainMenu" class="screen">
+            <p id="mainNewGame">New Game</p>
+            <p id="mainHighScores">High Scores</p>
+            <p id="mainControls">Controls</p>
+            <p id="mainCredits">Credits</p>
+        </div>
+        <div id="highScores" class="screen">
+            <h1>High Scores</h1>
+            <p id="highScoresBack">Back</p>
+        </div>
+        <div id="controls" class="screen">
+            <h1>Controls</h1>
+            <div id="controlsTable">
+                <div id="header" class="tableHeader">
+                    <div class="table-row-item">Action</div>
+                    <div class="table-row-item">Key</div>
+                </div>
+                <div id="rotLeftRow" class="tableRow">
+                    <div class="table-row-item">Rotate Left</div>
+                    <div class="table-row-item" id="rotLeft"></div>
+                </div>
+                <div id="rotRightRow" class="tableRow">
+                    <div class="table-row-item">Rotate Right</div>
+                    <div class="table-row-item" id="rotRight"></div>
+                </div>
+                <div id="thrustRow" class="tableRow">
+                    <div class="table-row-item">Thrust</div>
+                    <div class="table-row-item" id="thrust"></div>
+                </div>
+            </div>
+            <p id="controlsBack">Back</p>
+        </div>
+        <div id="credits" class="screen">
+            <h1>Created By</h1>
+            <h1>Carson Sorenson</h1>
+            <p id="creditsBack">Back</p>
+        </div>
+        <div id="gameplay" class="screen">
+            <canvas id="myCanvas"></canvas>
+        </div>
+    </div>
+    <script>
+        let MyGame = {
+            screens: {},
+            keyBindings: {},
+            objects: {},
+            render: {}
+        };
+    </script>
+
+    <script src="scripts/menu/main.js"></script>
+    <script src="scripts/menu/controls.js"></script>
+    <script src="scripts/menu/credits.js"></script>
+    <script src="scripts/menu/highScores.js"></script>
+    <script src="scripts/menu/mainMenu.js"></script>
+
+    <script src="scripts/objects/image.js"></script>
+    <script src="scripts/objects/input.js"></script>
+
+    <script src="scripts/render/core.js"></script>
+    <script src="scripts/render/background.js"></script>
+    <script src="scripts/render/spaceship.js"></script>
+    <script src="scripts/render/particles.js"></script>
+    <script src="scripts/render/status.js"></script>
+    <script src="scripts/render/countdown.js"></script>
+
+    <script src="scripts/gameplay/random.js"></script>
+    <script src="scripts/gameplay/particle.js"></script>
+    <script src="scripts/gameplay/particle-system.js"></script>
+    <script src="scripts/gameplay/spaceship.js"></script>
+    <script src="scripts/gameplay/terrain.js"></script>
+    <script src="scripts/gameplay/main.js"></script>
+</body>
+</html>
