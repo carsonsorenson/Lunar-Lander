@@ -11,7 +11,7 @@ class ParticleSystem {
                 origCenter: {x: spec.origCenter.x, y: spec.origCenter.y },
                 center: {x: spec.center.x, y: spec.center.y },
                 size: {width: size, height: size},
-                rotation: 0,
+                rotation: spec.rotation,
                 speed: Random.nextGaussian(spec.speed.mean, spec.speed.stdev),
                 direction: Random.nextThrustVector(),
                 lifetime: Random.nextGaussian(spec.lifetime.mean, spec.lifetime.stdev)

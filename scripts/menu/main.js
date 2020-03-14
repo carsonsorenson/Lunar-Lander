@@ -17,7 +17,6 @@ MyGame.game = (function(screens) {
         }
 
         if (activeScreen == 'gameplay') {
-            console.log('here')
             centerBody();
         }
         activeScreen = id;

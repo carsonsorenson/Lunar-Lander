@@ -7,7 +7,7 @@ class Spaceship {
 
         this.lastPos = {x: 0, y: 0};
         this.size = {width: 0, height: 0};
-        this.position = {x: 0, y: 0};
+        this.position = {x: graphics.width * 0.1, y: 0};
         this.center = {x: 0, y: 0};
         this.momentum = {x: 0, y:0};
         this.thrust = {x: 0, y: 0};
@@ -110,7 +110,8 @@ class Spaceship {
                 origCenter: {x: this.center.x, y: this.center.y},
                 center: {x: this.center.x, y: this.center.y + (this.size.height / 2)},
                 size: {mean: 4, stdev: 1},
-                speed: {mean: 0, stdev: 0.1},
+                speed: {mean: 0.2, stdev: 0.1},
+                rotation: this.rotation,
                 lifetime: {mean: 200, stdev: 30}
             });
             this.fuel -= (elapsedTime / 1000);

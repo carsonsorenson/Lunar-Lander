@@ -19,12 +19,12 @@ MyGame.render.particles = (function(graphics) {
     function render(spaceship) {
         for (let i = 0; i < spaceship.particleSystem.particles.length; i++) {
             let spec = spaceship.particleSystem.particles[i].spec;
-            let newCenter = rotatePointAboutPoint(spec.origCenter, spec.center, spaceship.rotation);
+            let newCenter = rotatePointAboutPoint(spec.origCenter, spec.center, spec.rotation);
             graphics.drawTexture(
                 spec.image,
                 newCenter,
                 spec.size,
-                spec.rotation,
+                0,
             )
         }
     }

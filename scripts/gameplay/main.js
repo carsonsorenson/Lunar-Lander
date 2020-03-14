@@ -78,7 +78,7 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
                     break;
                 }
             }
-            if (spaceship.validAngle() && spaceship.validSpeed() && spaceship.fuel > 0) {
+            if (spaceship.validAngle() && spaceship.validSpeed()) {
                 spaceship.alive = false;
                 spaceship.won = true;
                 level++;
@@ -95,9 +95,9 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
             countdown -= elapsedTime;
         }
         else if (countdown <= 0 && spaceship.won) {
-            gameOver = false;
             terrain = new Terrain(level);
             spaceship.init();
+            countdown = 3000;
         }
         spaceship.particleSystem.update(elapsedTime);
     }
