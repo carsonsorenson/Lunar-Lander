@@ -1,7 +1,7 @@
 class Terrain {
     constructor(level) {
         this.max = 0.99;
-        this.min = 0.3;
+        this.min = 0.4;
         this.level = level;
         this.points = [];
         this.addPoint(0, this.randRange(this.min, this.max));

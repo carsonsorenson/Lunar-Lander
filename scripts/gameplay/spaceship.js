@@ -1,5 +1,5 @@
 class Spaceship {
-    constructor(keyBindings, particleImage, graphics) {
+    constructor(keyBindings, particleImage, explosionSound, thrustSound, graphics) {
         this.gravity = -0.000025;
         this.thrustRate = 0.0001
         this.alive = true;
@@ -11,15 +11,18 @@ class Spaceship {
         this.center = {x: 0, y: 0};
         this.momentum = {x: 0, y:0};
         this.thrust = {x: 0, y: 0};
-        this.rotation = 0;
+        this.rotation = (90 * Math.PI) / 180;
         this.rotationRate = 2 * Math.PI / 5000;
 
         this.angleDegrees;
         this.fuel = 20;
         this.speed;
+        this.thrusting = false;
 
         this.particleSystem = new ParticleSystem();
         this.particleImage = particleImage;
+        this.explosionSound = explosionSound;
+        this.thrustSound = thrustSound;
         this.graphics = graphics;
 
         this.bindings = {
@@ -30,10 +33,10 @@ class Spaceship {
     }
 
     init() {
-        this.position.x = 0;
-        this.position.y = 0;
+        this.position = {x: this.graphics.width * 0.1, y: 0};
         this.center.x = this.position.x + (this.size.width / 2);
         this.center.y = this.position.y + (this.size.height / 2);
+        this.rotation = (90 * Math.PI) / 180;
         this.alive = true;
         this.won = false;
     }
@@ -73,10 +76,18 @@ class Spaceship {
             this.angleDegrees += 360;
         }
 
+        if (!this.thrusting && !this.thrustSound.paused) {
+            this.thrustSound.pause();
+        }
+
+        this.thrusting = false;
+
         this.speed = Math.sqrt(this.momentum.x * this.momentum.x + this.momentum.y * this.momentum.y) * 100;
     }
 
     explode() {
+        this.thrustSound.pause();
+        this.explosionSound.play();
         this.alive = false;
         this.particleSystem.explosion({
             image: this.particleImage.image,
@@ -98,6 +109,11 @@ class Spaceship {
     }
 
     thrustUp(elapsedTime) {
+        this.thrusting = true;
+        if (this.thrustSound.paused) {
+            this.thrustSound.currentTime = 20.5; 
+            this.thrustSound.play();
+        }
         if (this.fuel > 0) {
             this.thrust.x = Math.sin(this.rotation);
             this.thrust.y = Math.cos(this.rotation);
@@ -122,7 +138,7 @@ class Spaceship {
     }
 
     resize(w, image) {
-        let s = w * 0.075;
+        let s = w * 0.04;
         let ratio = image.width / image.height;
         let height = s;
         let width = s * ratio;

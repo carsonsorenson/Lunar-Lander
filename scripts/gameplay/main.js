@@ -6,7 +6,7 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
     let myInput = null;
     let countdown = 3000;
 
-    let level = 1;
+    let level;
 
     let myBackground;
     let mySpaceship;
@@ -53,12 +53,16 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
 
     function resize() {
         graphics.resize();
-        spaceship.resize(width, mySpaceship.image);
+        spaceship.resize(graphics.width, mySpaceship.image);
     }
 
 
     function processInput(elapsedTime) {
         if ('Escape' in myInput.keys) {
+            if (!explosionSound.paused) {
+                explosionSound.pause();
+                explosionSound.currentTime = 0;
+            }
             cancelNextRequest = true;
             game.showScreen('mainMenu');
         }
@@ -72,13 +76,15 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
     function update(elapsedTime) {
         let intersectingPoints = getIntersectingPoints();
         if (intersectingPoints.length > 0 && spaceship.alive) {
+            let flat = true;
             for (let i = 0; i < intersectingPoints.length; i++) {
                 if (!intersectingPoints[i].flat) {
-                    spaceship.explode();
+                    flat = false;
                     break;
                 }
             }
-            if (spaceship.validAngle() && spaceship.validSpeed()) {
+            if (spaceship.validAngle() && spaceship.validSpeed() && flat) {
+                landingSound.play();
                 spaceship.alive = false;
                 spaceship.won = true;
                 level++;
@@ -106,6 +112,7 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
         graphics.clear();
         renderer.background.render(myBackground);
         graphics.drawTerrain(terrain);
+        graphics.drawBorder();
         if (spaceship.alive || spaceship.won) {
             renderer.spaceship.render(mySpaceship, spaceship);
         }
@@ -141,11 +148,24 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
         particleImage = objects.image({
             imageSrc: 'assets/fire.png'
         });
+
+        explosionSound = objects.sound({
+            audioSrc: 'assets/explosion.mp3'
+        });
+
+        thrustSound = objects.sound({
+            audioSrc: 'assets/thrust.flac'
+        });
+
+        landingSound = objects.sound({
+            audioSrc: 'assets/landing.wav'
+        });
     }
 
     function run() {
+        level = 1;
         terrain = new Terrain(level);
-        spaceship = new Spaceship(keyBindings, particleImage, graphics);
+        spaceship = new Spaceship(keyBindings, particleImage, explosionSound, thrustSound, graphics);
         myInput = input.Keyboard();
         cancelNextRequest = false;
 

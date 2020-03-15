@@ -15,7 +15,17 @@ MyGame.graphics = (function() {
         };
     }
 
+    function drawBorder() {
+        ctx.save();
+        ctx.strokeStyle = "white";
+        ctx.strokeRect(
+            0, 0, ctx.canvas.width, ctx.canvas.height
+        );
+        ctx.restore();
+    }
+
     function drawTerrain(terrain) {
+        ctx.save();
         ctx.beginPath();
         ctx.lineWidth = 3;
         ctx.fillStyle = "black";
@@ -48,6 +58,7 @@ MyGame.graphics = (function() {
                 isFlat = false;
             }
         }
+        ctx.restore();
     }
 
     function drawTexture(image, center, size, rotation) {
@@ -76,8 +87,17 @@ MyGame.graphics = (function() {
     }
 
     function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        let width = window.innerWidth * 0.99;
+        let height = window.innerHeight * 0.99;
+
+        if (width / height < 1.69) {
+            canvas.width = width;
+            canvas.height = width / 1.69;
+        }
+        else {
+            canvas.height = height;
+            canvas.width = height * 1.69;
+        }
     }
 
 
@@ -89,7 +109,8 @@ MyGame.graphics = (function() {
         drawTerrain,
         drawTexture,
         drawText,
-        resize
+        resize,
+        drawBorder
     }
 
     return api;
