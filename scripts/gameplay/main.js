@@ -77,13 +77,13 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
         let crashed = Intersection.crashed;
 
         if (landed && !crashed) {
-            renderer.countdown.render(countdown, level);
+            renderer.text.drawCountdown(countdown, level);
             renderer.spaceship.render(mySpaceship, spaceship);
         }
         else if (!landed) {
             renderer.spaceship.render(mySpaceship, spaceship);
         }
-        renderer.status.render(spaceship);
+        renderer.text.drawStatus(spaceship);
         renderer.particles.render(spaceship);
 
     }
