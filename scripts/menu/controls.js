@@ -1,9 +1,9 @@
 MyGame.screens['controls'] = (function(game) {
-    MyGame.keyBindings = {
-        left: 'ArrowLeft',
-        right: 'ArrowRight',
-        thrust: 'ArrowUp',
-    };
+    if (!('left' in MyGame.persistence.keyBindings)) {
+        MyGame.persistence.addKeyBinding('left', 'ArrowLeft');
+        MyGame.persistence.addKeyBinding('right', 'ArrowRight');
+        MyGame.persistence.addKeyBinding('thrust', 'ArrowUp');
+    }
 
     let buttons = {
         left: {
@@ -38,7 +38,7 @@ MyGame.screens['controls'] = (function(game) {
     function onKeyPress(e) {
         for (let button in buttons) {
             if (buttons[button].active) {
-                MyGame.keyBindings[button] = e.key;
+                MyGame.persistence.addKeyBinding(button, e.key);
                 buttons[button].key.innerHTML = e.key;
             }
         }
@@ -61,7 +61,7 @@ MyGame.screens['controls'] = (function(game) {
                     changeBinding(this, button);
                 }
             )
-            buttons[button].key.innerHTML = MyGame.keyBindings[button];
+            buttons[button].key.innerHTML = MyGame.persistence.keyBindings[button];
         }
     }
 

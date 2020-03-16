@@ -162,4 +162,4 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
         run
     }
 
-}(MyGame.game, MyGame.objects, MyGame.render, MyGame.graphics, MyGame.input, MyGame.keyBindings));
+}(MyGame.game, MyGame.objects, MyGame.render, MyGame.graphics, MyGame.input, MyGame.persistence.keyBindings));
