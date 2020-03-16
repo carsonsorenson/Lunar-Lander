@@ -5,57 +5,24 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
     let cancelNextRequest;
     let myInput = null;
     let countdown = 3000;
-
     let level;
+    let score;
 
     let myBackground;
     let mySpaceship;
     let particleImage;
-
-    function intersection(pt1, pt2, circleCenter, circleRadius) {
-        let v1 = { x: pt2.x - pt1.x, y: pt2.y - pt1.y };
-        let v2 = { x: pt1.x - circleCenter.x, y: pt1.y - circleCenter.y };
-        let b = -2 * (v1.x * v2.x + v1.y * v2.y);
-        let c =  2 * (v1.x * v1.x + v1.y * v1.y);
-        let d = Math.sqrt(b * b - 2 * c * (v2.x * v2.x + v2.y * v2.y - circleRadius * circleRadius));
-        if (isNaN(d)) {
-            return false;
-        }
-        let u1 = (b - d) / c;  
-        let u2 = (b + d) / c;
-        if (u1 <= 1 && u1 >= 0) {
-            return true;
-        }
-        if (u2 <= 1 && u2 >= 0) {
-            return true;
-        }
-        return false;
-    }
-
-    function getIntersectingPoints() {
-        let intersectingPoints = [];
-        for (let i = 0; i < terrain.points.length -1; i++) {
-            let pt1 = {
-                x: Math.round(terrain.points[i].x * graphics.width),
-                y: Math.round(terrain.points[i].y * graphics.height)
-            };
-            let pt2 = {
-                x: Math.round(terrain.points[i+1].x * graphics.width),
-                y: Math.round(terrain.points[i+1].y * graphics.height)
-            }
-            if (intersection(pt1, pt2, spaceship.center, spaceship.size.height / 2)) {
-                intersectingPoints.push(terrain.points[i]);
-                intersectingPoints.push(terrain.points[i+1]);
-            }
-        }
-        return intersectingPoints;
-    }
 
     function resize() {
         graphics.resize();
         spaceship.resize(graphics.width, mySpaceship.image);
     }
 
+    function restart() {
+        countdown = 3000;
+        terrain = new Terrain(level);
+        spaceship.init();
+        Intersection.calculate(terrain, spaceship, graphics);
+    }
 
     function processInput(elapsedTime) {
         if ('Escape' in myInput.keys) {
@@ -67,45 +34,62 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
             game.showScreen('mainMenu');
         }
         else {
-            if (spaceship.alive) {
+            if (!Intersection.landed) {
                 spaceship.processInput(myInput.keys, elapsedTime);
             }
         }
     }
 
-    function update(elapsedTime) {
-        let intersectingPoints = getIntersectingPoints();
-        if (intersectingPoints.length > 0 && spaceship.alive) {
-            let flat = true;
-            for (let i = 0; i < intersectingPoints.length; i++) {
-                if (!intersectingPoints[i].flat) {
-                    flat = false;
-                    break;
-                }
-            }
-            if (spaceship.validAngle() && spaceship.validSpeed() && flat) {
-                landingSound.play();
-                spaceship.alive = false;
-                spaceship.won = true;
-                level++;
-            }
-            else {
+    function updateShip(elapsedTime) {
+        Intersection.calculate(terrain, spaceship, graphics);
+        if (Intersection.justLanded() && !Intersection.crashed) {
+            level++;
+            score += 20000;
+            landingSound.play();
+        }
+
+        let landed = Intersection.landed;
+        let crashed = Intersection.crashed;
+
+        if (landed && crashed) {
+            if (!spaceship.crashed) {
+                console.log('here')
                 spaceship.explode();
             }
         }
-
-        if (spaceship.alive) {
+        else if (landed && !crashed) {
+            if (countdown > 0) {
+                countdown -= elapsedTime;
+            }
+            else {
+                restart();
+            }
+        }
+        else {
+            score += elapsedTime;
             spaceship.update(elapsedTime);
         }
-        else if (countdown > 0 && spaceship.won) {
-            countdown -= elapsedTime;
-        }
-        else if (countdown <= 0 && spaceship.won) {
-            terrain = new Terrain(level);
-            spaceship.init();
-            countdown = 3000;
-        }
         spaceship.particleSystem.update(elapsedTime);
+    }
+
+    function renderShip() {
+        let landed = Intersection.landed;
+        let crashed = Intersection.crashed;
+
+        if (landed && !crashed) {
+            renderer.countdown.render(countdown, level);
+            renderer.spaceship.render(mySpaceship, spaceship);
+        }
+        else if (!landed) {
+            renderer.spaceship.render(mySpaceship, spaceship);
+        }
+        renderer.status.render(spaceship);
+        renderer.particles.render(spaceship);
+
+    }
+
+    function update(elapsedTime) {
+        updateShip(elapsedTime);
     }
 
     function render() {
@@ -113,14 +97,11 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
         renderer.background.render(myBackground);
         graphics.drawTerrain(terrain);
         graphics.drawBorder();
-        if (spaceship.alive || spaceship.won) {
-            renderer.spaceship.render(mySpaceship, spaceship);
+        renderer.text.drawScore(score);
+        if (Intersection.crashed) {
+            renderer.text.drawGameOver();
         }
-        if (spaceship.won)  {
-            renderer.countdown.render(countdown, level);
-        }
-        renderer.status.render(spaceship);
-        renderer.particles.render(spaceship);
+        renderShip();
     }
 
     function gameLoop(time) {
@@ -164,6 +145,7 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
 
     function run() {
         level = 1;
+        score = 0;
         terrain = new Terrain(level);
         spaceship = new Spaceship(keyBindings, particleImage, explosionSound, thrustSound, graphics);
         myInput = input.Keyboard();

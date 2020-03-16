@@ -2,8 +2,6 @@ class Spaceship {
     constructor(keyBindings, particleImage, explosionSound, thrustSound, graphics) {
         this.gravity = -0.000025;
         this.thrustRate = 0.0001
-        this.alive = true;
-        this.won = false;
 
         this.lastPos = {x: 0, y: 0};
         this.size = {width: 0, height: 0};
@@ -18,6 +16,7 @@ class Spaceship {
         this.fuel = 20;
         this.speed;
         this.thrusting = false;
+        this.crashed = false;
 
         this.particleSystem = new ParticleSystem();
         this.particleImage = particleImage;
@@ -37,8 +36,7 @@ class Spaceship {
         this.center.x = this.position.x + (this.size.width / 2);
         this.center.y = this.position.y + (this.size.height / 2);
         this.rotation = (90 * Math.PI) / 180;
-        this.alive = true;
-        this.won = false;
+        this.crashed = false;
     }
 
     processInput(keys, elapsedTime) {
@@ -86,9 +84,9 @@ class Spaceship {
     }
 
     explode() {
+        this.crashed = true;
         this.thrustSound.pause();
         this.explosionSound.play();
-        this.alive = false;
         this.particleSystem.explosion({
             image: this.particleImage.image,
             origCenter: {x: this.center.x, y: this.center.y},
@@ -97,7 +95,6 @@ class Spaceship {
             speed: {mean: 0, stdev: 0.1},
             lifetime: {mean: 1500, stdev: 300}
         })
-        this.won = false;
     }
 
     right(elapsedTime) {
