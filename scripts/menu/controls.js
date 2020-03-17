@@ -5,6 +5,8 @@ MyGame.screens['controls'] = (function(game) {
         MyGame.persistence.addKeyBinding('thrust', 'ArrowUp');
     }
 
+    let alerted = false;
+
     let buttons = {
         left: {
             row: document.getElementById("rotLeftRow"),
@@ -57,6 +59,10 @@ MyGame.screens['controls'] = (function(game) {
             buttons[button].row.classList.remove('active');
             buttons[button].row.addEventListener(
                 'click', function() {
+                    if (!alerted) {
+                        alert("Press any key to change key binding")
+                        alerted = true;
+                    }
                     removeActives();
                     changeBinding(this, button);
                 }

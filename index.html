@@ -8,60 +8,73 @@
 <body onload="MyGame.game.initialize()">
     <div id="menuing">
         <div id="mainMenu" class="screen">
-            <p id="mainNewGame">New Game</p>
-            <p id="mainHighScores">High Scores</p>
-            <p id="mainControls">Controls</p>
-            <p id="mainCredits">Credits</p>
+            <div id="title">
+                <h1>LUNAR LANDER</h1>
+            </div>
+            <div id="menuItems">
+                <p class="menuButton" id="mainNewGame">NEW GAME</p>
+                <p class="menuButton" id="mainHighScores">HIGH SCORES</p>
+                <p class="menuButton" id="mainControls">CONTROLS</p>
+                <p class="menuButton" id="mainCredits">CREDITS</p>
+            </div>
         </div>
         <div id="highScores" class="screen">
-            <h1>High Scores</h1>
+            <h1>HIGH SCORES</h1>
             <div id="highScoreList"></div>
-            <p id="highScoresBack">Back</p>
+            <div id="menuItems">
+                <p class="menuButton" id="highScoresBack">BACK</p>
+            </div>
         </div>
         <div id="controls" class="screen">
-            <h1>Controls</h1>
+            <h1>CONTROLS</h1>
             <div id="controlsTable">
                 <div id="header" class="tableHeader">
-                    <div class="table-row-item">Action</div>
-                    <div class="table-row-item">Key</div>
+                    <div class="table-row-item"><p>ACTION</p></div>
+                    <div class="table-row-item"><p>KEY</p></div>
                 </div>
                 <div id="rotLeftRow" class="tableRow">
-                    <div class="table-row-item">Rotate Left</div>
-                    <div class="table-row-item" id="rotLeft"></div>
+                    <div class="table-row-item"><p>ROTATE LEFT</p></div>
+                    <div class="table-row-item"><p id="rotLeft"></p></div>
                 </div>
                 <div id="rotRightRow" class="tableRow">
-                    <div class="table-row-item">Rotate Right</div>
-                    <div class="table-row-item" id="rotRight"></div>
+                    <div class="table-row-item"><p>ROTATE RIGHT</p></div>
+                    <div class="table-row-item"><p id="rotRight"></p></div>
                 </div>
                 <div id="thrustRow" class="tableRow">
-                    <div class="table-row-item">Thrust</div>
-                    <div class="table-row-item" id="thrust"></div>
+                    <div class="table-row-item"><p>THRUST</p></div>
+                    <div class="table-row-item"><p id="thrust"></p></div>
                 </div>
             </div>
-            <p id="controlsBack">Back</p>
+            <div id="menuItems">
+                <p class="menuButton" id="controlsBack">BACK</p>
+            </div>
         </div>
         <div id="credits" class="screen">
-            <h1>Created By</h1>
-            <h1>Carson Sorenson</h1>
-            <p id="creditsBack">Back</p>
+            <h1>CREATED BY</h1>
+            <h1>CARSON SORENSON</h1>
+            <div id="menuItems">
+                <p class="menuButton" id="creditsBack">BACK</p>
+            </div>
         </div>
         <div id="gameplay" class="screen">
             <canvas id="myCanvas"></canvas>
             <div id="pauseGame">
-                <p id="pauseMainMenu">Main Menu</p>
-                <p id="pauseReturn">Return to Game</p>
+                <div id="menuItems" style="transform: translateX(50%);">
+                    <p class="menuButton" id="pauseMainMenu">MAIN MENU</p>
+                    <p class="menuButton" id="pauseReturn">RETURN TO GAME</p>
+                </div>
             </div>
             <div id="gameOver">
                 <h1>Game Over!</h1>
                 <div id="leaderboard">
-                    <p>You made the leaderboard!</p>
-                    <label for="name">Name</label>
+                    <p>YOU MADE THE LEADERBOARD!</p>
+                    <label for="name">NAME</label>
                     <input type="text" id="scoreName" name="scoreName" maxLength="10" size="12">
-                    <button type="button" id="submitScore">Submit</button>
+                    <button type="button" id="submitScore">SUBMIT</button>
                 </div>
                 <div id="noLeaderboard">
-                    <p>You did not make the leaderboard</p>
-                    <button type="button" id="noLeaderboardButton">Main Menu</button>
+                    <p>YOU DID NOT MAKE THE LEADERBOARD</p>
+                    <button type="button" id="noLeaderboardButton">MAIN MENU</button>
                 </div>
             </div>
         </div>

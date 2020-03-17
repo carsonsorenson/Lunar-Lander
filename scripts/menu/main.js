@@ -35,6 +35,7 @@ MyGame.game = (function(screens) {
         let height = s * 0.95;
         document.getElementById('menuing').style.width = `${width}px`;
         document.getElementById('menuing').style.height = `${height}px`;
+        document.getElementById('menuing').style["font-size"] = `${width / 20}px`;
     }
 
     function initialize() {
