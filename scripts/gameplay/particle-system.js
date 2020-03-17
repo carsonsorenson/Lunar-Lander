@@ -3,7 +3,7 @@ class ParticleSystem {
         this.particles = [];
     }
 
-    thrust(spec) {
+    shipThrust(spec) {
         for (let i = 0; i < 20; i++) {
             let size = Math.abs(Random.nextGaussian(spec.size.mean, spec.size.stdev));
             this.particles.push(new Particle({
@@ -19,7 +19,7 @@ class ParticleSystem {
         }
     }
 
-    explosion(spec) {
+    shipCrash(spec) {
         this.particles.length = 0;
         for (let i = 0; i < 200; i++) {
             let size = Math.abs(Random.nextGaussian(spec.size.mean, spec.size.stdev));

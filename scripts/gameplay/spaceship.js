@@ -87,7 +87,7 @@ class Spaceship {
         this.crashed = true;
         this.thrustSound.pause();
         this.explosionSound.play();
-        this.particleSystem.explosion({
+        this.particleSystem.shipCrash({
             image: this.particleImage.image,
             origCenter: {x: this.center.x, y: this.center.y},
             center: {x: this.center.x, y: this.center.y + (this.size.height / 2)},
@@ -118,7 +118,7 @@ class Spaceship {
             this.momentum.x += this.thrust.x * this.thrustRate * elapsedTime;
             this.momentum.y -= this.thrust.y * this.thrustRate * elapsedTime;
 
-            this.particleSystem.thrust({
+            this.particleSystem.shipThrust({
                 image: this.particleImage.image,
                 origCenter: {x: this.center.x, y: this.center.y},
                 center: {x: this.center.x, y: this.center.y + (this.size.height / 2)},

@@ -31,13 +31,12 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
 
     function gameOver() {
         if (!showGameOverScreen) {
+            scoreName.value = "";
             gameOverScreen.style.display = "block";
             let added = persistence.canAddScore(Math.floor(score / 1000));
-            console.log(added);
             if (added) {
                 document.getElementById("leaderboard").style.display = "block";
                 document.getElementById("noLeaderboard").style.display = "none";
-                //persistence.addScore(score);
             }
             else {
                 document.getElementById("leaderboard").style.display = "none";
@@ -48,10 +47,13 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
     }
 
     function processInput(elapsedTime) {
-        if ('Escape' in myInput.keys) {
+        if ('Escape' in myInput.keys && !Intersection.crashed) {
             if (!explosionSound.paused) {
                 explosionSound.pause();
                 explosionSound.currentTime = 0;
+            }
+            if (!thrustSound.paused) {
+                thrustSound.pause();
             }
             pausedGameScreen.style.display = "block";
             paused = true;
@@ -189,8 +191,11 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
         document.getElementById("submitScore").addEventListener(
             'click', function() {
                 let formattedScore = Math.floor(score / 1000);
-                console.log(formattedScore);
                 persistence.addScore(scoreName.value, formattedScore);
+                if (!explosionSound.paused) {
+                    explosionSound.pause();
+                    explosionSound.currentTime = 0;
+                }
                 game.showScreen("highScores");
             }
         )
