@@ -33,22 +33,6 @@ MyGame.render.text = (function(graphics) {
         })
     }
 
-    function drawGameOver() {
-        let fontSize = Math.floor(graphics.height / 10);
-        let font = `${fontSize}px monospace`;
-
-        let text = "Game Over!";
-        let width = getWidth(font, text);
-        let color = "white";
-
-        graphics.drawText({
-            font,
-            fillStyle: color,
-            text,
-            pos: {x: graphics.width / 2 - (width / 2), y: graphics.height / 2}
-        })
-    }
-
     function drawStatus(spaceship) {
         let fixedText = `fuel   :  20.00 s`;
         let margin = graphics.height * 0.05;
@@ -116,7 +100,6 @@ MyGame.render.text = (function(graphics) {
 
     return {
         drawScore,
-        drawGameOver,
         drawStatus,
         drawCountdown
     }

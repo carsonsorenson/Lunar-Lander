@@ -106,12 +106,12 @@ class Spaceship {
     }
 
     thrustUp(elapsedTime) {
-        this.thrusting = true;
-        if (this.thrustSound.paused) {
-            this.thrustSound.currentTime = 20.5; 
-            this.thrustSound.play();
-        }
         if (this.fuel > 0) {
+            this.thrusting = true;
+            if (this.thrustSound.paused) {
+                this.thrustSound.currentTime = 20.5; 
+                this.thrustSound.play();
+            }
             this.thrust.x = Math.sin(this.rotation);
             this.thrust.y = Math.cos(this.rotation);
 

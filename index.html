@@ -15,6 +15,7 @@
         </div>
         <div id="highScores" class="screen">
             <h1>High Scores</h1>
+            <div id="highScoreList"></div>
             <p id="highScoresBack">Back</p>
         </div>
         <div id="controls" class="screen">
@@ -46,6 +47,23 @@
         </div>
         <div id="gameplay" class="screen">
             <canvas id="myCanvas"></canvas>
+            <div id="pauseGame">
+                <p id="pauseMainMenu">Main Menu</p>
+                <p id="pauseReturn">Return to Game</p>
+            </div>
+            <div id="gameOver">
+                <h1>Game Over!</h1>
+                <div id="leaderboard">
+                    <p>You made the leaderboard!</p>
+                    <label for="name">Name</label>
+                    <input type="text" id="scoreName" name="scoreName" maxLength="10" size="12">
+                    <button type="button" id="submitScore">Submit</button>
+                </div>
+                <div id="noLeaderboard">
+                    <p>You did not make the leaderboard</p>
+                    <button type="button" id="noLeaderboardButton">Main Menu</button>
+                </div>
+            </div>
         </div>
     </div>
     <script>

@@ -7,7 +7,9 @@ MyGame.screens['highScores'] = (function(game) {
         )
     }
 
-    function run() {};
+    function run() {
+        MyGame.persistence.updateScores();
+    };
 
     return {
         initialize,

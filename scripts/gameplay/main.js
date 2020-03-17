@@ -1,4 +1,4 @@
-MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input, keyBindings) {
+MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input, persistence) {
     let terrain = null;
     let spaceship = null;
     let lastTime = null;
@@ -7,6 +7,11 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
     let countdown = 3000;
     let level;
     let score;
+    let pausedGameScreen;
+    let paused;
+    let gameOverScreen;
+    let showGameOverScreen;
+    let scoreName;
 
     let myBackground;
     let mySpaceship;
@@ -24,14 +29,33 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
         Intersection.calculate(terrain, spaceship, graphics);
     }
 
+    function gameOver() {
+        if (!showGameOverScreen) {
+            gameOverScreen.style.display = "block";
+            let added = persistence.canAddScore(Math.floor(score / 1000));
+            console.log(added);
+            if (added) {
+                document.getElementById("leaderboard").style.display = "block";
+                document.getElementById("noLeaderboard").style.display = "none";
+                //persistence.addScore(score);
+            }
+            else {
+                document.getElementById("leaderboard").style.display = "none";
+                document.getElementById("noLeaderboard").style.display = "block";
+            }
+        }
+        showGameOverScreen = true;
+    }
+
     function processInput(elapsedTime) {
         if ('Escape' in myInput.keys) {
             if (!explosionSound.paused) {
                 explosionSound.pause();
                 explosionSound.currentTime = 0;
             }
+            pausedGameScreen.style.display = "block";
+            paused = true;
             cancelNextRequest = true;
-            game.showScreen('mainMenu');
         }
         else {
             if (!Intersection.landed) {
@@ -53,7 +77,6 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
 
         if (landed && crashed) {
             if (!spaceship.crashed) {
-                console.log('here')
                 spaceship.explode();
             }
         }
@@ -94,12 +117,13 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
 
     function render() {
         graphics.clear();
+        graphics.renderPauseScreen(paused);
         renderer.background.render(myBackground);
         graphics.drawTerrain(terrain);
         graphics.drawBorder();
         renderer.text.drawScore(score);
         if (Intersection.crashed) {
-            renderer.text.drawGameOver();
+            gameOver();
         }
         renderShip();
     }
@@ -118,6 +142,10 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
     }
     
     function initialize() {
+        scoreName = document.getElementById("scoreName");
+        pausedGameScreen = document.getElementById("pauseGame");
+        gameOverScreen = document.getElementById("gameOver")
+
         myBackground = objects.image({
             imageSrc: 'assets/bg.jpg',
         });
@@ -141,13 +169,48 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
         landingSound = objects.sound({
             audioSrc: 'assets/landing.wav'
         });
+
+        document.getElementById("pauseMainMenu").addEventListener(
+            'click', function() {
+                game.showScreen("mainMenu");
+            }
+        )
+
+        document.getElementById("pauseReturn").addEventListener(
+            'click', function() {
+                cancelNextRequest = false;
+                paused = false;
+                pausedGameScreen.style.display = "none";
+                lastTime = performance.now();
+                requestAnimationFrame(gameLoop);
+            }
+        )
+
+        document.getElementById("submitScore").addEventListener(
+            'click', function() {
+                let formattedScore = Math.floor(score / 1000);
+                console.log(formattedScore);
+                persistence.addScore(scoreName.value, formattedScore);
+                game.showScreen("highScores");
+            }
+        )
+
+        document.getElementById("noLeaderboardButton").addEventListener(
+            'click', function() {
+                game.showScreen("mainMenu");
+            }
+        )
     }
 
     function run() {
         level = 1;
         score = 0;
+        paused = false;
+        showGameOverScreen = false;
+        pausedGameScreen.style.display = "none";
+        gameOverScreen.style.display = "none";
         terrain = new Terrain(level);
-        spaceship = new Spaceship(keyBindings, particleImage, explosionSound, thrustSound, graphics);
+        spaceship = new Spaceship(persistence.keyBindings, particleImage, explosionSound, thrustSound, graphics);
         myInput = input.Keyboard();
         cancelNextRequest = false;
 
@@ -162,4 +225,4 @@ MyGame.screens['gameplay'] = (function(game, objects, renderer, graphics, input,
         run
     }
 
-}(MyGame.game, MyGame.objects, MyGame.render, MyGame.graphics, MyGame.input, MyGame.persistence.keyBindings));
+}(MyGame.game, MyGame.objects, MyGame.render, MyGame.graphics, MyGame.input, MyGame.persistence));

@@ -100,6 +100,15 @@ MyGame.graphics = (function() {
         }
     }
 
+    function renderPauseScreen(paused) {
+        if (paused) {
+            ctx.globalAlpha = 0.2;
+        }
+        else {
+            ctx.globalAlpha = 1.0;
+        }
+    }
+
 
     let api = {
         get width() { return canvas.width },
@@ -110,7 +119,8 @@ MyGame.graphics = (function() {
         drawTexture,
         drawText,
         resize,
-        drawBorder
+        drawBorder,
+        renderPauseScreen
     }
 
     return api;
